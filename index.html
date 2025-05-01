@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Cookies - Comprehensive Guide</title>
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --light-color: #e8f4f8;
+            --dark-color: #2c3e50;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --text-color: #333;
+            --text-light: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        h3 {
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* Feature Box */
+        .feature-box {
+            background-color: white;
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 4px 4px 0;
+            box-shadow: var(--shadow);
+        }
+
+        /* Table Styles */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+            background-color: white;
+        }
+
+        .comparison-table th, 
+        .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .comparison-table tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question {
+            background-color: white;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .options {
+            margin-top: 1rem;
+        }
+
+        .option {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .option:hover {
+            background-color: #f0f8ff;
+        }
+
+        input[type="radio"], 
+        input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        #results {
+            display: none;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        .final-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .final-result {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .result-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-explanation {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: #666;
+        }
+
+        .user-answer {
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+
+            .card, .feature-box {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Understanding Cookies</h1>
+        <nav>
+            <ul>
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#types" class="nav-link">Types of Cookies</a></li>
+                <li><a href="#quiz" class="nav-link">Cookie Quiz</a></li>
+                <li><a href="#browsers" class="nav-link">Browser Guide</a></li>
+                <li><a href="#faq" class="nav-link">FAQ</a></li>
+                <li><a href="#references" class="nav-link">References</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <h2>Welcome to Our Comprehensive Guide on Web Cookies</h2>
+            <p>This website provides detailed information about web cookies, their various types, management techniques, security considerations, and legal aspects. Whether you're a casual internet user or a web developer, you'll find valuable information here.</p>
+            
+            <div class="feature-box">
+                <h3>Did You Know?</h3>
+                <p>The term "cookie" in web browsers comes from "magic cookie," a concept in Unix programming representing a small piece of data passed between programs.</p>
+            </div>
+        </section>
+
+        <!-- Types of Cookies Page -->
+        <section id="types" class="page">
+            <h2>Types of Web Cookies</h2>
+            <p>Cookies come in several varieties, each serving different purposes in web browsing and user experience.</p>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Cookie Type</th>
+                    <th>Duration</th>
+                    <th>Purpose</th>
+                    <th>Security</th>
+                </tr>
+                <tr>
+                    <td><strong>Session Cookies</strong></td>
+                    <td>Temporary</td>
+                    <td>Maintain user session state</td>
+                    <td>Generally safe</td>
+                </tr>
+                <tr>
+                    <td><strong>Persistent Cookies</strong></td>
+                    <td>Days to years</td>
+                    <td>Remember preferences/logins</td>
+                    <td>Secure if properly implemented</td>
+                </tr>
+                <tr>
+                    <td><strong>Secure Cookies</strong></td>
+                    <td>Varies</td>
+                    <td>HTTPS-only secure data</td>
+                    <td>Very secure</td>
+                </tr>
+                <tr>
+                    <td><strong>Third-Party Cookies</strong></td>
+                    <td>Varies</td>
+                    <td>Tracking/advertising</td>
+                    <td>Privacy concerns</td>
+                </tr>
+                <tr>
+                    <td><strong>Supercookies</strong></td>
+                    <td>Persistent</td>
+                    <td>Advanced tracking</td>
+                    <td>High privacy risk</td>
+                </tr>
+            </table>
+            
+            <div class="card">
+                <h3>Technical Cookie Attributes</h3>
+                <ul>
+                    <li><strong>Domain:</strong> Specifies which domain can access the cookie</li>
+                    <li><strong>Path:</strong> Limits cookie access to specific paths</li>
+                    <li><strong>Expires/Max-Age:</strong> Controls cookie lifetime</li>
+                    <li><strong>Secure:</strong> Only sent over HTTPS</li>
+                    <li><strong>HttpOnly:</strong> Not accessible via JavaScript</li>
+                    <li><strong>SameSite:</strong> Controls cross-site sending</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Browser Guide Page -->
+        <section id="browsers" class="page">
+            <h2>Browser-Specific Cookie Guides</h2>
+            <p>Each browser handles cookies slightly differently. Here's how to manage them in popular browsers.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Google Chrome</h3>
+                    <ol>
+                        <li>Click the three-dot menu > Settings</li>
+                        <li>Select "Privacy and security"</li>
+                        <li>Choose "Cookies and other site data"</li>
+                        <li>Adjust settings as needed</li>
+                    </ol>
+                </div>
+                
+                <div class="card">
+                    <h3>Mozilla Firefox</h3>
+                    <ol>
+                        <li>Click the hamburger menu > Options</li>
+                        <li>Select "Privacy & Security"</li>
+                        <li>Scroll to "Cookies and Site Data"</li>
+                        <li>Configure your preferences</li>
+                    </ol>
+                </div>
+                
+                <div class="card">
+                    <h3>Apple Safari</h3>
+                    <ol>
+                        <li>Open Safari > Preferences</li>
+                        <li>Go to the "Privacy" tab</li>
+                        <li>Manage "Cookies and website data"</li>
+                        <li>Set your preferred level of blocking</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <h3>Emerging Browser Changes</h3>
+            <p>Modern browsers are increasingly restricting third-party cookies by default:</p>
+            <ul>
+                <li>Firefox blocks third-party tracking cookies by default</li>
+                <li>Safari implements Intelligent Tracking Prevention (ITP)</li>
+                <li>Chrome is phasing out third-party cookies (planned for 2024)</li>
+                <li>Edge follows Chrome's lead with tracking prevention</li>
+            </ul>
+        </section>
+
+        <!-- FAQ Page -->
+        <section id="faq" class="page">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="card">
+                <h3>Are cookies dangerous?</h3>
+                <p>Cookies themselves are not dangerous - they're just text files. However, they can be used for tracking, and stolen cookies can be used to hijack sessions. Proper cookie management minimizes risks.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Should I accept all cookies?</h3>
+                <p>It's generally better to be selective. Accept only necessary cookies (for site functionality) and evaluate whether to accept others based on your privacy preferences.</p>
+            </div>
+            
+            <div class="card">
+                <h3>What's the difference between first-party and third-party cookies?</h3>
+                <p>First-party cookies are set by the site you're visiting, while third-party cookies are set by other domains (usually advertisers or analytics services).</p>
+            </div>
+            
+            <div class="card">
+                <h3>Do I need to accept cookies to use websites?</h3>
+                <p>For most sites, you need to accept necessary cookies for basic functionality, but you can often reject non-essential cookies (like those for tracking or advertising).</p>
+            </div>
+            
+            <div class="card">
+                <h3>How often should I clear my cookies?</h3>
+                <p>This depends on your privacy needs. Monthly is reasonable for most users, while privacy-conscious users might clear them weekly or after each browsing session.</p>
+            </div>
+        </section>
+
+        <!-- References Page -->
+        <section id="references" class="page">
+            <h2>References and Resources</h2>
+            
+            <div class="card">
+                <h3>Additional Learning Resources</h3>
+                <ul>
+                    <li><a href="https://www.allaboutcookies.org/" target="_blank">All About Cookies</a></li>
+                    <li><a href="https://web.dev/articles/samesite-cookies-explained" target="_blank">SameSite Cookies Explained</a></li>
+                    <li><a href="https://cookiepedia.co.uk/" target="_blank">Cookiepedia</a></li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>Browser Documentation</h3>
+                <ul>
+                    <li><a href="https://support.google.com/chrome/answer/95647" target="_blank">Chrome Cookie Settings</a></li>
+                    <li><a href="https://support.mozilla.org/en-US/kb/disable-third-party-cookies" target="_blank">Firefox Cookie Settings</a></li>
+                    <li><a href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac" target="_blank">Safari Cookie Settings</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Quiz Page -->
+        <section id="quiz" class="page">
+            <div class="quiz-container">
+                <h2>Cookie Knowledge Quiz</h2>
+                <p>Test your understanding of web cookies with this interactive quiz. After completing all questions, you'll receive a detailed score report.</p>
+                
+                <form id="cookieQuiz">
+                    <!-- Question 1 - Multiple Choice (Single Answer) -->
+                    <div class="question" id="q1">
+                        <h3>1. What is the primary purpose of session cookies?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q1a" name="q1" value="a">
+                                <label for="q1a">To store user preferences permanently</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1b" name="q1" value="b">
+                                <label for="q1b">To maintain information during a single browsing session</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1c" name="q1" value="c">
+                                <label for="q1c">To track users across multiple websites</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q1d" name="q1" value="d">
+                                <label for="q1d">To store encrypted user credentials</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 2 - Multiple Choice (Single Answer) -->
+                    <div class="question" id="q2">
+                        <h3>2. Which cookie attribute prevents JavaScript from accessing the cookie?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q2a" name="q2" value="a">
+                                <label for="q2a">Secure flag</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2b" name="q2" value="b">
+                                <label for="q2b">HttpOnly flag</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2c" name="q2" value="c">
+                                <label for="q2c">SameSite attribute</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q2d" name="q2" value="d">
+                                <label for="q2d">Path attribute</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 3 - Multiple Choice (Single Answer) -->
+                    <div class="question" id="q3">
+                        <h3>3. Which regulation requires websites to obtain explicit consent for non-essential cookies?</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" id="q3a" name="q3" value="a">
+                                <label for="q3a">GDPR</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q3b" name="q3" value="b">
+                                <label for="q3b">CCPA</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q3c" name="q3" value="c">
+                                <label for="q3c">PIPEDA</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" id="q3d" name="q3" value="d">
+                                <label for="q3d">HIPAA</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 4 - Fill in the Blank -->
+                    <div class="question" id="q4">
+                        <h3>4. Complete this sentence: Cookies that remain on your device after closing the browser are called __________ cookies.</h3>
+                        <div class="options">
+                            <input type="text" id="q4answer" name="q4" placeholder="Type your answer here">
+                        </div>
+                    </div>
+                    
+                    <!-- Question 5 - Multiple Choice (Multiple Answers) -->
+                    <div class="question" id="q5">
+                        <h3>5. Which of the following are considered best practices for cookie security? (Select all that apply)</h3>
+                        <div class="options">
+                            <div class="option">
+                                <input type="checkbox" id="q5a" name="q5" value="a">
+                                <label for="q5a">Using the Secure flag for HTTPS-only transmission</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q5b" name="q5" value="b">
+                                <label for="q5b">Implementing the HttpOnly flag</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q5c" name="q5" value="c">
+                                <label for="q5c">Setting very long expiration times</label>
+                            </div>
+                            <div class="option">
+                                <input type="checkbox" id="q5d" name="q5" value="d">
+                                <label for="q5d">Using the SameSite attribute</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="submitQuiz">Submit Quiz</button>
+                </form>
+                
+                <div id="results">
+                    <h3>Quiz Results</h3>
+                    <div class="final-score">Your score: <span id="score">0</span>/5</div>
+                    <div class="final-result">Result: <span id="result">Fail</span></div>
+                    
+                    <div class="result-item" id="r1">
+                        <p><strong>Question 1:</strong> What is the primary purpose of session cookies?</p>
+                        <p>Your answer: <span class="user-answer"></span></p>
+                        <p>Correct answer: To maintain information during a single browsing session</p>
+                        <p class="result-explanation">Session cookies are temporary and only last for a single browsing session. They're commonly used for shopping carts or other temporary storage needs.</p>
+                    </div>
+                    
+                    <div class="result-item" id="r2">
+                        <p><strong>Question 2:</strong> Which cookie attribute prevents JavaScript from accessing the cookie?</p>
+                        <p>Your answer: <span class="user-answer"></span></p>
+                        <p>Correct answer: HttpOnly flag</p>
+                        <p class="result-explanation">The HttpOnly flag is an important security measure that prevents client-side scripts from accessing the cookie, helping to prevent XSS attacks.</p>
+                    </div>
+                    
+                    <div class="result-item" id="r3">
+                        <p><strong>Question 3:</strong> Which regulation requires websites to obtain explicit consent for non-essential cookies?</p>
+                        <p>Your answer: <span class="user-answer"></span></p>
+                        <p>Correct answer: GDPR</p>
+                        <p class="result-explanation">The General Data Protection Regulation (GDPR) requires explicit, informed consent for non-essential cookies used by websites serving EU users.</p>
+                    </div>
+                    
+                    <div class="result-item" id="r4">
+                        <p><strong>Question 4:</strong> Complete this sentence: Cookies that remain on your device after closing the browser are called __________ cookies.</p>
+                        <p>Your answer: <span class="user-answer"></span></p>
+                        <p>Correct answer: persistent</p>
+                        <p class="result-explanation">Persistent cookies remain on your device until they expire or are manually deleted, unlike session cookies which disappear when you close the browser.</p>
+                    </div>
+                    
+                    <div class="result-item" id="r5">
+                        <p><strong>Question 5:</strong> Which of the following are considered best practices for cookie security?</p>
+                        <p>Your answer: <span class="user-answer"></span></p>
+                        <p>Correct answers: Using the Secure flag for HTTPS-only transmission, Implementing the HttpOnly flag, Using the SameSite attribute</p>
+                        <p class="result-explanation">These three practices significantly improve cookie security. Long expiration times are generally not recommended as they increase the window of vulnerability if cookies are compromised.</p>
+                    </div>
+                    
+                    <button type="button" id="retakeQuiz">Retake Quiz</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Page navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize page display based on URL hash
+            function showPageFromHash() {
+                const hash = window.location.hash.substring(1);
+                const pages = document.querySelectorAll('.page');
+                
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                // Show the page matching the hash or default to home
+                const targetPage = document.getElementById(hash) || document.getElementById('home');
+                targetPage.classList.add('active');
+            }
+            
+            // Set up nav link click handlers
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const pageId = this.getAttribute('href').substring(1);
+                    window.location.hash = pageId;
+                    showPageFromHash();
+                });
+            });
+            
+            // Handle initial page load
+            showPageFromHash();
+            
+            // Handle back/forward navigation
+            window.addEventListener('hashchange', showPageFromHash);
+            
+            // Quiz functionality
+            const quizForm = document.getElementById('cookieQuiz');
+            const resultsDiv = document.getElementById('results');
+            const submitBtn = document.getElementById('submitQuiz');
+            const retakeBtn = document.getElementById('retakeQuiz');
+            
+            if (submitBtn && retakeBtn) {
+                submitBtn.addEventListener('click', calculateQuizScore);
+                retakeBtn.addEventListener('click', resetQuiz);
+            }
+            
+            // Mobile menu toggle
+            const menuToggle = document.createElement('button');
+            menuToggle.className = 'menu-toggle';
+            menuToggle.innerHTML = '☰ Menu';
+            menuToggle.style.display = 'none';
+            document.body.prepend(menuToggle);
+            
+            const nav = document.querySelector('nav');
+            
+            function checkScreenSize() {
+                if (window.innerWidth <= 768) {
+                    menuToggle.style.display = 'block';
+                    nav.style.display = 'none';
+                } else {
+                    menuToggle.style.display = 'none';
+                    nav.style.display = 'block';
+                }
+            }
+            
+            menuToggle.addEventListener('click', function() {
+                nav.style.display = nav.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        });
+        
+        function calculateQuizScore() {
+            let score = 0;
+            
+            // Question 1
+            const q1Answer = document.querySelector('input[name="q1"]:checked');
+            if (q1Answer && q1Answer.value === 'b') {
+                score++;
+                document.querySelector('#r1 .user-answer').textContent = q1Answer.nextElementSibling.textContent;
+                document.querySelector('#r1 .user-answer').style.color = 'var(--success-color)';
+            } else {
+                document.querySelector('#r1 .user-answer').textContent = q1Answer ? q1Answer.nextElementSibling.textContent : 'No answer';
+                document.querySelector('#r1 .user-answer').style.color = 'var(--danger-color)';
+            }
+            
+            // Question 2
+            const q2Answer = document.querySelector('input[name="q2"]:checked');
+            if (q2Answer && q2Answer.value === 'b') {
+                score++;
+                document.querySelector('#r2 .user-answer').textContent = q2Answer.nextElementSibling.textContent;
+                document.querySelector('#r2 .user-answer').style.color = 'var(--success-color)';
+            } else {
+                document.querySelector('#r2 .user-answer').textContent = q2Answer ? q2Answer.nextElementSibling.textContent : 'No answer';
+                document.querySelector('#r2 .user-answer').style.color = 'var(--danger-color)';
+            }
+            
+            // Question 3
+            const q3Answer = document.querySelector('input[name="q3"]:checked');
+            if (q3Answer && q3Answer.value === 'a') {
+                score++;
+                document.querySelector('#r3 .user-answer').textContent = q3Answer.nextElementSibling.textContent;
+                document.querySelector('#r3 .user-answer').style.color = 'var(--success-color)';
+            } else {
+                document.querySelector('#r3 .user-answer').textContent = q3Answer ? q3Answer.nextElementSibling.textContent : 'No answer';
+                document.querySelector('#r3 .user-answer').style.color = 'var(--danger-color)';
+            }
+            
+            // Question 4
+            const q4Answer = document.getElementById('q4answer').value.trim().toLowerCase();
+            if (q4Answer === 'persistent') {
+                score++;
+                document.querySelector('#r4 .user-answer').textContent = q4Answer;
+                document.querySelector('#r4 .user-answer').style.color = 'var(--success-color)';
+            } else {
+                document.querySelector('#r4 .user-answer').textContent = q4Answer || 'No answer';
+                document.querySelector('#r4 .user-answer').style.color = 'var(--danger-color)';
+            }
+            
+            // Question 5
+            const q5Answers = Array.from(document.querySelectorAll('input[name="q5"]:checked')).map(el => el.value);
+            const correctQ5 = ['a', 'b', 'd'];
+            const isCorrect = q5Answers.length === 3 && q5Answers.every(val => correctQ5.includes(val));
+            
+            if (isCorrect) {
+                score++;
+                document.querySelector('#r5 .user-answer').textContent = q5Answers.map(val => {
+                    return document.querySelector(`input[name="q5"][value="${val}"]`).nextElementSibling.textContent;
+                }).join(', ');
+                document.querySelector('#r5 .user-answer').style.color = 'var(--success-color)';
+            } else {
+                document.querySelector('#r5 .user-answer').textContent = q5Answers.length ? 
+                    q5Answers.map(val => {
+                        return document.querySelector(`input[name="q5"][value="${val}"]`).nextElementSibling.textContent;
+                    }).join(', ') : 'No answer';
+                document.querySelector('#r5 .user-answer').style.color = 'var(--danger-color)';
+            }
+            
+            // Display results
+            document.getElementById('score').textContent = score;
+            document.getElementById('result').textContent = score >= 3 ? 'Pass' : 'Fail';
+            document.getElementById('result').style.color = score >= 3 ? 'var(--success-color)' : 'var(--danger-color)';
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function resetQuiz() {
+            // Reset form
+            document.getElementById('cookieQuiz').reset();
+            
+            // Hide results
+            document.getElementById('results').style.display = 'none';
+            
+            // Scroll to top of quiz
+            document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
